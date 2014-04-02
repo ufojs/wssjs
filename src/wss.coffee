@@ -1,8 +1,12 @@
+{Request} = require('./request')
 sockets = chrome.sockets if chrome?
 
 class WSS
   constructor: (@address = '0.0.0.0', @port = 9000) ->
     @id = -1
+
+  doHandshake: (request) ->
+    console.log(request)
 
   listen: ->
     self = this
@@ -10,12 +14,15 @@ class WSS
     onReceiveCallback = (socketInfo) ->
       console.log 'onReceive callback called'
       return if socketInfo.socketId != self.id
-
+      r = new Request socketInfo.data
+      self.doHandshake r if r['Upgrade']? and r['Upgrade'] == 'websocket'
+            
     onAcceptCallback = (socketInfo) ->
       console.log 'onAccept callback called'
+      console.log(socketInfo)
       return if socketInfo.socketId != self.id
       sockets.tcp.onReceive.addListener onReceiveCallback
-      sockets.tcp.setPaused self.id, false
+      sockets.tcp.setPaused socketInfo.clientSocketId, false
 
     onListening = (resultCode) ->
       console.log 'onListening callback called'

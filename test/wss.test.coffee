@@ -139,10 +139,10 @@ describe 'A websocket server', ->
     chrome.sockets.tcpServer.listen = (id, address, port, callback) ->
       callback 0
     chrome.sockets.tcpServer.onAccept.addListener = (callback) ->
-      callback {'socketId': 'anID' }
+      callback {'socketId': 'anID', 'clientSocketId': 'otherId' }
     chrome.sockets.tcp.onReceive.addListener = (callback) ->
     chrome.sockets.tcp.setPaused = (id, status) ->
-      id.should.be.equal 'anID'
+      id.should.be.equal 'otherId'
       status.should.be.equal false
       done()
     wssModule.__set__ 'sockets', chrome.sockets

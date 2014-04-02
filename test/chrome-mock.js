@@ -5,7 +5,8 @@ var chrome = {
       'listen': function() {},
       'onAccept': {
         'addListener': function() {}
-      }
+      },
+      'setPaused': function() {}
     },
     'tcp': {
       'onReceive': {
