@@ -1,8 +1,16 @@
 ﻿# Enabling BDD style
 chai = require 'chai'
 chai.should()
+# Test lib
+WebSocket = require 'ws'
+# Mocking chrome socket api
+{chrome} = require './chrome-mock.js'
+socket = chrome.socket
+rewire = require 'rewire'
 # Getting UUT
-{WSS} = require '../src/wss'
+wssModule = rewire '../src/wss'
+wssModule.__set__ 'socket', socket
+WSS = wssModule.WSS
 
 describe 'A websocket server', ->
   
@@ -28,3 +36,14 @@ describe 'A websocket server', ->
     currentServer.address.should.be.equal '0.0.0.0'
     currentServer.port.should.be.equal 9000
     done()
+
+  it 'should provide listen method', (done) ->
+    currentServer = new WSS
+    currentServer.should.respondTo 'listen'
+    done()
+
+  #it 'should listen for a ws connection', (done) ->
+    #currentServer = new WSS
+    #currentServer.listen()
+    #ws = new WebSocket 'ws://127.0.0.1:9000'
+    #ws.on 'open', -> done()
