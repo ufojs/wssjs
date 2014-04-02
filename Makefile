@@ -27,6 +27,6 @@ run-chrome: prepare test compile integration-test
 	$(CHROME) --load-and-launch-app=integration-test/chrome-app --user-data-dir=/tmp/testufo
 
 clean:
-	rm -rf node_modules lib
+	rm -rf node_modules lib/wss.bundle.*
 
 .PHONY: all prepare test compile develop clean integration-test
