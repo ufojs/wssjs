@@ -68,7 +68,8 @@ module.exports = function(config) {
         base: 'Chrome',
         flags: [
           '--load-and-launch-app=integration-test/chrome-app',
-          '--no-first-run'
+          '--no-first-run',
+          '--no-sandbox'
         ]
       }
     },
