@@ -1,7 +1,11 @@
 var chrome = {
-  'socket': {
-    'create': function(type, options, responder) {
-      console.log(type)
+  'sockets': {
+    'tcpServer': { 
+      'create': null,
+      'listen': null,
+      'onAccept': {
+        'addListener': null
+      }
     }
   }
 }

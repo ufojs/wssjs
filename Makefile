@@ -12,7 +12,7 @@ integration-test:
 
 compile:
 	mkdir -p lib
-	PATH="$(PATH):./node_modules/.bin/" browserify -t coffeeify --extension=".coffee" src/wss.coffee > lib/wss.bundle.js
+	PATH="$(PATH):./node_modules/.bin/" browserify -t coffeeify --extension=".coffee" -s ufo src/wss.coffee -o lib/wss.bundle.js
 	PATH="$(PATH):./node_modules/.bin/" uglifyjs lib/wss.bundle.js -o lib/wss.bundle.min.js
 
 develop: prepare

@@ -1,20 +1,19 @@
 {
   "manifest_version": 2,
   "name": "wssjs test app",
-  "description": "Test application for wssjs",
-  "version": "0.0.1",
-
+  "version": "1",
+  "minimum_chrome_version": "33",
   "app": {
     "background": {
       "scripts": ["background.js"]
     }
   },
-
-  "permissions": [ "*://*/*" ],
-
   "sockets": {
     "tcpServer": {
       "listen": "*"
+    },
+    "tcp": {
+      "connect": "*"
     }
   }
 }
