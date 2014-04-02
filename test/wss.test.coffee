@@ -115,3 +115,37 @@ describe 'A websocket server', ->
 
     currentServer = new wssModule.WSS
     currentServer.listen()
+
+  it 'should register an onReceive listener', (done) ->
+    wssModule = rewire '../src/wss'
+    chrome.sockets.tcpServer.create = (opts, callback) -> 
+      callback {'socketId': 'anID' }
+    chrome.sockets.tcpServer.listen = (id, address, port, callback) ->
+      callback 0
+    chrome.sockets.tcpServer.onAccept.addListener = (callback) ->
+      callback {'socketId': 'anID' }
+    chrome.sockets.tcp.onReceive.addListener = (callback) ->
+      callback.should.be.instanceof Function
+      done()
+    wssModule.__set__ 'sockets', chrome.sockets
+
+    currentServer = new wssModule.WSS
+    currentServer.listen()
+
+  it 'should un-pause the socket', (done) ->
+    wssModule = rewire '../src/wss'
+    chrome.sockets.tcpServer.create = (opts, callback) -> 
+      callback {'socketId': 'anID' }
+    chrome.sockets.tcpServer.listen = (id, address, port, callback) ->
+      callback 0
+    chrome.sockets.tcpServer.onAccept.addListener = (callback) ->
+      callback {'socketId': 'anID' }
+    chrome.sockets.tcp.onReceive.addListener = (callback) ->
+    chrome.sockets.tcp.setPaused = (id, status) ->
+      id.should.be.equal 'anID'
+      status.should.be.equal false
+      done()
+    wssModule.__set__ 'sockets', chrome.sockets
+
+    currentServer = new wssModule.WSS
+    currentServer.listen()

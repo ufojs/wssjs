@@ -7,14 +7,22 @@ class WSS
   listen: ->
     self = this
 
-    onConnection = (info) ->
-      console.log 'onConnection callback called'
+    onReceiveCallback = (socketInfo) ->
+      console.log 'onReceive callback called'
+      return if socketInfo.socketId != self.id
+      console.log(String.fromCharCode.apply(null, new Uint16Array(socketInfo.data)))
+
+    onAcceptCallback = (socketInfo) ->
+      console.log 'onAccept callback called'
+      return if socketInfo.socketId != self.id
+      sockets.tcp.onReceive.addListener onReceiveCallback
+      sockets.tcp.setPaused self.id, false
 
     onListening = (resultCode) ->
       console.log 'onListening callback called'
       if resultCode < 0
         return self.onError('Error listening: code ' + resultCode)
-      sockets.tcpServer.onAccept.addListener(onConnection)
+      sockets.tcpServer.onAccept.addListener onAcceptCallback
 
     onSocketCreated = (socketInfo) ->
       console.log 'onSocketCreated callback called'
@@ -22,6 +30,8 @@ class WSS
       sockets.tcpServer.listen self.id, self.address, self.port, onListening
 
     sockets.tcpServer.create {}, onSocketCreated
+
+
 
   # Callbacks section
   onError: (error) ->
