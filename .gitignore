@@ -1,4 +1,5 @@
 .DS_Store
 node_modules/
-lib/
+lib/wss.bundle.js
+lib/wss.bundle.min.js
 integration-test/chrome-app/wss.bundle.js
