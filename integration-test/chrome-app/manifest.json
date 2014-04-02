@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "wssjs test app",
+  "description": "Test application for wssjs",
+  "version": "0.0.1",
+
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+
+  "permissions": [ "*://*/*" ],
+
+  "sockets": {
+    "tcpServer": {
+      "listen": "*"
+    }
+  }
+}
