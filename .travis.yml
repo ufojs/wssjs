@@ -2,5 +2,8 @@ language: node_js
 node_js:
   - "0.10"
 before_script:
+  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  - sudo apt-get update --force-yes
+  - sudo apt-get install -qq --force-yes google-chrome-stable
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
