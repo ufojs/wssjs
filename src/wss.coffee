@@ -10,7 +10,6 @@ class WSS
     onReceiveCallback = (socketInfo) ->
       console.log 'onReceive callback called'
       return if socketInfo.socketId != self.id
-      console.log(String.fromCharCode.apply(null, new Uint16Array(socketInfo.data)))
 
     onAcceptCallback = (socketInfo) ->
       console.log 'onAccept callback called'
