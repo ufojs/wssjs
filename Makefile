@@ -1,4 +1,4 @@
-all: prepare test compile
+all: prepare test compile integration-test
 
 prepare:
 	npm install
