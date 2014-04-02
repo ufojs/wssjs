@@ -1,3 +1,8 @@
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+	CHROME := /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+endif
+
 all: prepare test compile integration-test
 
 prepare:
@@ -19,7 +24,7 @@ develop: prepare
 	fswatch "./src/:./test/" "make test"
 
 run-chrome: prepare test compile integration-test
-	/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --load-and-launch-app=integration-test/chrome-app --user-data-dir=/tmp/testufo
+	$(CHROME) --load-and-launch-app=integration-test/chrome-app --user-data-dir=/tmp/testufo
 
 clean:
 	rm -rf node_modules lib
