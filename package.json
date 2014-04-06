@@ -27,7 +27,8 @@
     "uglify-js": "^2.4.13",
     "rewire": "^2.0.0",
     "ws": "^0.4.31",
-    "karma": "^0.12.3"
+    "karma": "^0.12.3",
+    "btoa": "^1.1.1"
   },
   "devDependencies": {
     "karma-mocha": "^0.1.3",

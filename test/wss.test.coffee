@@ -2,13 +2,15 @@
 chai = require 'chai'
 chai.should()
 # Test lib
+{Message} = require '../src/message'
 #WebSocket = require 'ws'
 # Mocking chrome socket api
 {chrome} = require './chrome-mock.js'
 rewire = require 'rewire'
 # Getting UUT
 {WSS} = require '../src/wss'
-
+# Array buffer utilities
+bufferUtils = require '../src/buffer-utils'
 
 describe 'A websocket server', ->
   
@@ -149,3 +151,48 @@ describe 'A websocket server', ->
 
     currentServer = new wssModule.WSS
     currentServer.listen()
+
+  it 'should evaluate a wesbocket request', (done) ->
+    packetArrayBuffer = bufferUtils.fromStringToBuffer 'Upgrade:websocket\n'
+    wssModule = rewire '../src/wss'
+    chrome.sockets.tcpServer.create = (opts, callback) -> 
+      callback {'socketId': 'anID' }
+    chrome.sockets.tcpServer.listen = (id, address, port, callback) ->
+      callback 0
+    chrome.sockets.tcpServer.onAccept.addListener = (callback) ->
+      callback {'socketId': 'anID', 'clientSocketId': 'otherId' }
+    chrome.sockets.tcp.onReceive.addListener = (callback) ->
+      callback {'socketId': 'otherId', 'data': packetArrayBuffer}
+    chrome.sockets.tcp.setPaused = (id, status) ->
+    wssModule.__set__ 'sockets', chrome.sockets
+
+    currentServer = new wssModule.WSS
+    currentServer.doHandshake = (request) ->
+      request.should.be.instanceof Message
+      done()
+    currentServer.listen()
+
+  it 'should not evaluate any other requests', (done) ->
+    packetArrayBuffer = bufferUtils.fromStringToBuffer 'GET / HTTP/1.1\n'
+    wssModule = rewire '../src/wss'
+    chrome.sockets.tcpServer.create = (opts, callback) -> 
+      callback {'socketId': 'anID' }
+    chrome.sockets.tcpServer.listen = (id, address, port, callback) ->
+      callback 0
+    chrome.sockets.tcpServer.onAccept.addListener = (callback) ->
+      callback {'socketId': 'anID', 'clientSocketId': 'otherId' }
+    chrome.sockets.tcp.onReceive.addListener = (callback) ->
+      callback {'socketId': 'otherId', 'data': packetArrayBuffer}
+    chrome.sockets.tcp.setPaused = (id, status) ->
+    wssModule.__set__ 'sockets', chrome.sockets
+
+    currentServer = new wssModule.WSS
+    currentServer.doHandshake = (request) ->
+      assert.fail()
+    currentServer.listen()
+    setTimeout done, 1000
+
+  it 'should reply to a websocket request', (done) ->
+    currentServer = new WSS
+    currentServer.doHandshake({'Sec-WebSocket-Key': 'testkey'})
+    done()
