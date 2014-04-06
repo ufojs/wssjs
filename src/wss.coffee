@@ -1,7 +1,6 @@
 {Message} = require('./message')
 sockets = chrome.sockets if chrome?
-btoa = require 'btoa' if not btoa?
-{Sha1} = require('../lib/sha1')
+{Sha1} = require('./sha1-wrapper')
 
 class WSS
   constructor: (@address = '0.0.0.0', @port = 9000) ->
@@ -10,27 +9,14 @@ class WSS
   doHandshake: (request) ->
     console.log(request)
 
-    toArray = (string) ->
-      a = []
-      a.push char for char in string
-      return a
-
-    toString = (array) ->
-      s = ''
-      s += String.fromCharCode char for char in array
-      return s
-
     # Magic websocket string used to create session key
     magicStr = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
 
     clientKey = request['Sec-WebSocket-Key'] + magicStr
     sha1 = new Sha1
     sha1.reset()
-    sha1.update toArray clientKey
-    responseKey = btoa toString sha1.digest()
-
-
-
+    sha1.update clientKey
+    responseKey = sha1.digest()
 
   listen: ->
     self = this
