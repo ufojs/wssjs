@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/ufojs/wssjs.png?label=ready&title=Ready)](https://waffle.io/ufojs/wssjs)
 wssjs
 =====
 
