@@ -13,5 +13,21 @@ class Message
   set: (header, content) ->
     this[header] = content
 
+  bundle: () ->
+    fields = Object.keys this
+    functions = Object.keys this.__proto__
+
+    isNotAFunction = (element) ->
+      return functions.indexOf element == -1
+    
+    fields = fields.filter(isNotAFunction)
+    
+    pkt = 'HTTP/1.1 101 Switching Protocols\r\n'
+    pkt += header + ': ' + this[header] + '\r\n' for header in fields
+    pkt += '\r\n'
+
+    console.log pkt
+
+    return bufferUtils.fromStringToBuffer pkt
 
 exports.Message = Message

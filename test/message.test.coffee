@@ -29,6 +29,14 @@ describe 'An HTTP message', ->
 
   it 'should add a field to itself', (done) ->
     thisMessage = new Message
-    thisMessage.set('testHeader', 'testBody')
+    thisMessage.set 'testHeader', 'testBody'
     thisMessage['testHeader'].should.be.equal 'testBody'
+    done()
+
+  it 'should create a sendable HTTP packet', (done) ->
+    thisMessage = new Message
+    thisMessage.set 'header', 'content'
+    packet = thisMessage.bundle()
+    packet = bufferUtils.fromBufferToString packet
+    packet.should.be.equal 'HTTP/1.1 101 Switching Protocols\r\nheader: content\r\n\r\n'
     done()

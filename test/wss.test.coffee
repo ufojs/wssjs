@@ -193,6 +193,13 @@ describe 'A websocket server', ->
     setTimeout done, 1000
 
   it 'should reply to a websocket request', (done) ->
-    currentServer = new WSS
-    currentServer.doHandshake({'Sec-WebSocket-Key': 'testkey'})
-    done()
+    wssModule = rewire '../src/wss'
+    chrome.sockets.tcp.send = (id, data) ->
+      id.should.be.equal 'id'
+      data = bufferUtils.fromBufferToString data
+      data.should.be.equal 'HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: /AErEkZG6s+nFTmzfT4nQ6eMa2A=\r\n\r\n'
+      done()
+    wssModule.__set__ 'sockets', chrome.sockets
+    
+    currentServer = new wssModule.WSS
+    currentServer.doHandshake({'Sec-WebSocket-Key': 'testkey'}, 'id')

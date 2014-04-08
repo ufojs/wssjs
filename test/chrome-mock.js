@@ -12,7 +12,8 @@ var chrome = {
       'onReceive': {
         'addListener': function() {}
       },
-      'setPaused': function() {}
+      'setPaused': function() {},
+      'send': function() {}
     }
   }
 }
