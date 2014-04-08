@@ -5,17 +5,16 @@ Crypto = require 'crypto'
 class WSS
   constructor: (@address = '0.0.0.0', @port = 9000) ->
     @id = -1
+    @clientId = -1
 
   doHandshake: (request, clientId) ->
-    console.log(request)
+    console.log request
 
     # Magic websocket string used to create session key
     magicStr = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
 
     clientKey = request['Sec-WebSocket-Key'] + magicStr
-    console.log clientKey
-    console.log Crypto
-    responseKey = Crypto.createHash('sha1').update(clientKey).digest('base64')
+    responseKey = Crypto.createHash('sha1').update(clientKey).digest 'base64'
 
     response = new Message
     response.set 'Upgrade', 'websocket'
@@ -34,14 +33,15 @@ class WSS
 
     onReceiveCallback = (socketInfo) ->
       console.log 'onReceive callback called'
-      #return if socketInfo.socketId != self.id
+      return if socketInfo.socketId != self.clientId
       r = new Message socketInfo.data
       self.doHandshake r, socketInfo.socketId if r['Upgrade']? and r['Upgrade'] == 'websocket'
+      self.clientId = -1
             
     onAcceptCallback = (socketInfo) ->
       console.log 'onAccept callback called'
-      console.log(socketInfo)
       return if socketInfo.socketId != self.id
+      self.clientId = socketInfo.clientSocketId
       sockets.tcp.onReceive.addListener onReceiveCallback
       sockets.tcp.setPaused socketInfo.clientSocketId, false
 
@@ -57,8 +57,6 @@ class WSS
       sockets.tcpServer.listen self.id, self.address, self.port, onListening
 
     sockets.tcpServer.create {}, onSocketCreated
-
-
 
   # Callbacks section
   onError: (error) ->

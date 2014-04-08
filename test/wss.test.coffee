@@ -152,7 +152,7 @@ describe 'A websocket server', ->
     currentServer = new wssModule.WSS
     currentServer.listen()
 
-  it 'should evaluate a wesbocket request', (done) ->
+  it 'should evaluate a websocket request', (done) ->
     packetArrayBuffer = bufferUtils.fromStringToBuffer 'Upgrade:websocket\n'
     wssModule = rewire '../src/wss'
     chrome.sockets.tcpServer.create = (opts, callback) -> 
