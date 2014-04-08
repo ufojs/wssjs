@@ -203,3 +203,4 @@ describe 'A websocket server', ->
     
     currentServer = new wssModule.WSS
     currentServer.doHandshake({'Sec-WebSocket-Key': 'testkey'}, 'id')
+

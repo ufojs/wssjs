@@ -1,2 +1,2 @@
-var wss = new ufo.wss();
+var wss = new ufo.WSS();
 wss.listen();
