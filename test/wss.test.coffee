@@ -3,7 +3,6 @@ chai = require 'chai'
 chai.should()
 # Test lib
 {Message} = require '../src/message'
-#WebSocket = require 'ws'
 # Mocking chrome socket api
 {chrome} = require './chrome-mock.js'
 rewire = require 'rewire'
@@ -19,9 +18,9 @@ describe 'A websocket server', ->
     currentServer.should.not.be.null
     done()
 
-  it 'should have a onError callback', (done) ->
+  it 'should have a onerror callback', (done) ->
     currentServer = new WSS
-    currentServer.should.respondTo 'onError'
+    currentServer.should.respondTo 'onerror'
     done()
 
   it 'should have an invalid id', (done) ->
@@ -90,7 +89,7 @@ describe 'A websocket server', ->
     currentServer = new wssModule.WSS
     currentServer.listen()
 
-  it 'should invoke onError callback when resultCode < 0', (done) ->
+  it 'should invoke onerror callback when resultCode < 0', (done) ->
     wssModule = rewire '../src/wss'
     chrome.sockets.tcpServer.create = (opts, callback) -> 
       callback {'socketId': 'anID' }
@@ -99,7 +98,7 @@ describe 'A websocket server', ->
     wssModule.__set__ 'sockets', chrome.sockets
 
     currentServer = new wssModule.WSS
-    currentServer.onError = (error) ->
+    currentServer.onerror = (error) ->
       error.should.be.equal 'Error listening: code -1'
       done()
     currentServer.listen()
@@ -199,8 +198,29 @@ describe 'A websocket server', ->
       data = bufferUtils.fromBufferToString data
       data.should.be.equal 'HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: /AErEkZG6s+nFTmzfT4nQ6eMa2A=\r\n\r\n'
       done()
+
+    class fakeWebsocket
+      constructor: ->
+
     wssModule.__set__ 'sockets', chrome.sockets
-    
+    wssModule.__set__ 'WebSocket', fakeWebsocket
+
     currentServer = new wssModule.WSS
     currentServer.doHandshake({'Sec-WebSocket-Key': 'testkey'}, 'id')
 
+  it 'should fire onopen callback when a new websocket is accept', (done) ->
+    wssModule = rewire '../src/wss'
+    chrome.sockets.tcp.send = (id, data) ->
+
+    class fakeWebsocket
+      constructor: (@id) ->
+
+    wssModule.__set__ 'sockets', chrome.sockets
+    wssModule.__set__ 'WebSocket', fakeWebsocket
+    
+    currentServer = new wssModule.WSS
+    currentServer.should.respondTo 'onopen'
+    currentServer.onopen = (socket) ->
+      socket.id.should.be.equal 'id'
+      done()
+    currentServer.doHandshake({'Sec-WebSocket-Key': 'testkey'}, 'id')

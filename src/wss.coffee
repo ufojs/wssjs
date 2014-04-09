@@ -1,4 +1,5 @@
-{Message} = require('./message')
+{Message} = require './message'
+{WebSocket} = require './websocket'
 sockets = chrome.sockets if chrome?
 Crypto = require 'crypto'
 
@@ -14,7 +15,9 @@ class WSS
     magicStr = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
 
     clientKey = request['Sec-WebSocket-Key'] + magicStr
-    responseKey = Crypto.createHash('sha1').update(clientKey).digest 'base64'
+    responseKey = Crypto.createHash 'sha1'
+                        .update clientKey
+                        .digest 'base64'
 
     response = new Message
     response.set 'Upgrade', 'websocket'
@@ -27,6 +30,7 @@ class WSS
       console.log status
 
     sockets.tcp.send clientId, response.bundle(), onMessageSent
+    this.onopen new WebSocket clientId
 
   listen: ->
     self = this
@@ -42,14 +46,13 @@ class WSS
       console.log 'onAccept callback called'
       return if socketInfo.socketId != self.id
       self.clientId = socketInfo.clientSocketId
-      sockets.tcp.onReceive.addListener onReceiveCallback
       sockets.tcp.setPaused socketInfo.clientSocketId, false
 
     onListening = (resultCode) ->
       console.log 'onListening callback called'
-      if resultCode < 0
-        return self.onError('Error listening: code ' + resultCode)
+      return self.onerror 'Error listening: code ' + resultCode if resultCode < 0
       sockets.tcpServer.onAccept.addListener onAcceptCallback
+      sockets.tcp.onReceive.addListener onReceiveCallback
 
     onSocketCreated = (socketInfo) ->
       console.log 'onSocketCreated callback called'
@@ -59,6 +62,7 @@ class WSS
     sockets.tcpServer.create {}, onSocketCreated
 
   # Callbacks section
-  onError: (error) ->
+  onerror: (error) ->
+  onopen: (socket) ->
 
 exports.WSS = WSS
