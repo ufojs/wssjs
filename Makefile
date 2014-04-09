@@ -18,6 +18,7 @@ integration-test:
 compile:
 	mkdir -p lib
 	PATH="$(PATH):./node_modules/.bin/" browserify -t coffeeify --extension=".coffee" -s ufo src/wss.coffee -o lib/wss.bundle.js
+	./patch.sh
 	PATH="$(PATH):./node_modules/.bin/" uglifyjs lib/wss.bundle.js -o lib/wss.bundle.min.js
 
 develop: prepare
@@ -29,4 +30,4 @@ run-chrome: prepare test compile integration-test
 clean:
 	rm -rf node_modules lib/wss.bundle.*
 
-.PHONY: all prepare test compile develop clean integration-test
+.PHONY: all prepare test compile develop clean integration-test run-chrome

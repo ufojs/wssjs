@@ -23,7 +23,7 @@
     "coffee-script": "^1.7.1",
     "chai": "^1.9.1",
     "coffeeify": "^0.6.0",
-    "browserify": "^3.38.0",
+    "browserify": "^3.39.0",
     "uglify-js": "^2.4.13",
     "rewire": "^2.0.0",
     "karma": "^0.12.3"
