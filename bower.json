@@ -1,0 +1,22 @@
+{
+  "name": "wssjs",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ufojs/wssjs",
+  "authors": [
+    "Pasquale Boemio <boemianrapsodi@gmail.com>"
+  ],
+  "description": "A websocket server for browers",
+  "main": "./lib/wss.bundle.min.js",
+  "keywords": [
+    "websocket",
+    "ws"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
