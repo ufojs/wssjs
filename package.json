@@ -1,6 +1,6 @@
 {
   "name": "wss.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "TinyBox",
   "description": "A websocket server for browers",
   "contributors": [
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "karma-mocha": "^0.1.3",
-    "karma-chrome-launcher": "^0.1.3"
+    "karma-chrome-launcher": "^0.1.3",
+    "karma-chai": "^0.1.0"
   }
 }

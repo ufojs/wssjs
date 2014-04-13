@@ -1,5 +1,6 @@
 sockets = chrome.sockets if chrome?
 bufferUtils = require './buffer-utils'
+{Frame} = require './frame'
 
 class WebSocket
   constructor: (@id) ->
@@ -14,11 +15,13 @@ class WebSocket
     console.log 'onReceive ends'
 
   send: (data) ->
-    onMessageSent = (resultCode) ->
-      console.log 'Result Code: ' + resultCode
+    onMessageSent = (writeInfo) ->
+      console.log "Summary: " + JSON.stringify writeInfo
 
-    buffer = bufferUtils.fromStringToBuffer data
-    sockets.tcp.send this.id, buffer, onMessageSent
+    frame = new Frame
+    frame.setOperation Frame.DATA
+    frame.setMessage data
+    sockets.tcp.send this.id, frame.bundle(), onMessageSent
 
   # callbacks section
   onmessage: (event) ->

@@ -45,7 +45,7 @@ describe 'A websocket', ->
     wsModule = rewire '../src/websocket'
     chrome.sockets.tcp.send = (id, array, callback) ->
       id.should.be.equal 'myId'
-      array = bufferUtils.fromBufferToString array
+      array = bufferUtils.fromBufferToString array.slice 2
       array.should.be.equal 'test'
       callback.should.be.instanceOf Function
       done()
