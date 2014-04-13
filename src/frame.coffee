@@ -1,11 +1,25 @@
+bufferUtils = require './buffer-utils'
+
 class Frame
 
   @DATA: 1
   @CLOSE: 8
 
-  constructor: () ->
-    this.op = -1
-    this.message = ''
+  constructor: (buffer) ->
+    if not buffer?
+      this.op = -1
+      this.message = ''
+      return
+    view = new Uint8Array buffer
+    data = []
+    data.push element for element in view
+    this.op = data[0] & 15
+    this.length = data[1] & 127
+    mask = data.slice 2, 6
+    decoded = data.slice 6, 6 + this.length
+    decoded = decoded.map (byte, index) ->
+      return byte ^ mask[index % 4]
+    this.message = bufferUtils.fromBufferToString decoded
 
   setOperation: (operation) ->
     this.op = 128 | (operation & 15)

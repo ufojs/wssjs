@@ -64,3 +64,13 @@ describe 'A websocket frame', ->
     frameToSend = bufferUtils.fromBufferToString frameToSend.slice 2
     frameToSend.should.be.equal 'hello world'
     done()
+
+  it 'should parse a received frame', (done) ->
+    receivedFrame = new Frame
+    receivedFrame.setOperation Frame.DATA
+    receivedFrame.setMessage 'test'
+    parsedFrame = new Frame receivedFrame.bundle()
+    parsedFrame.op.should.be.equal Frame.DATA
+    parsedFrame.length.should.be.equal 4
+    #parsedFrame.message.should.be.equal 'test'
+    done()
