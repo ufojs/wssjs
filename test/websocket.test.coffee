@@ -89,11 +89,18 @@ describe 'A websocket', ->
       setTimeout -> callback { 'socketId': 'myId', 'data': frame.bundle() }, 1000
     chrome.sockets.tcp.disconnect = (id) ->
       id.should.be.equal 'myId'
+      chrome.sockets.tcp.onReceive.addListener = () ->
       done()
+    chrome.sockets.tcp.send = () ->
     wsModule.__set__ 'sockets', chrome.sockets
 
     ws = new wsModule.WebSocket 'myId'
     ws.readyState = WebSocket.CLOSING
+
+  it 'should respond to onclose callback', (done) ->
+    ws = new WebSocket 'myId'
+    ws.should.respondTo 'onclose'
+    done()
 
 
 

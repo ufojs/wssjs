@@ -13,14 +13,13 @@ class WebSocket
     onReceive = (socketInfo) ->
       console.log 'socket onReceive callback'
       receivedFrame = new Frame socketInfo.data
-      console.log receivedFrame
       return if socketInfo.socketId != self.id
       
       if receivedFrame.op == Frame.CLOSE
         self.close() if self.readyState == WebSocket.OPEN
         sockets.tcp.disconnect self.id
         self.readyState = WebSocket.CLOSED
-        return
+        return self.onclose()
 
       e =
         'data': receivedFrame.message
@@ -50,5 +49,6 @@ class WebSocket
 
   # callbacks section
   onmessage: (event) ->
+  onclose: () ->
 
 exports.WebSocket = WebSocket
