@@ -19,13 +19,14 @@ describe 'A websocket frame', ->
     done()
 
   it 'should static definition for frame types', (done) ->
-    Frame.DATA.should.be.equal 129
+    Frame.TEXT.should.be.equal 129
     Frame.CLOSE.should.be.equal 136
+    Frame.DATA.should.be.equal 130
     done()
 
   it 'should calculate the op field', (done) ->
     thisFrame = new Frame
-    thisFrame.setOperation Frame.DATA
+    thisFrame.setOperation Frame.TEXT
     thisFrame.op.should.be.equal 129
     thisFrame.setOperation Frame.CLOSE
     thisFrame.op.should.be.equal 136
@@ -53,7 +54,7 @@ describe 'A websocket frame', ->
 
   it 'should create the message as buffer', (done) ->
     thisFrame = new Frame
-    thisFrame.setOperation Frame.DATA
+    thisFrame.setOperation Frame.TEXT
     thisFrame.setMessage 'hello world'
     frameToSend = thisFrame.bundle()
     view = new Uint8Array frameToSend
@@ -65,10 +66,10 @@ describe 'A websocket frame', ->
 
   it 'should parse a received frame', (done) ->
     receivedFrame = new Frame
-    receivedFrame.setOperation Frame.DATA
+    receivedFrame.setOperation Frame.TEXT
     receivedFrame.setMessage 'test'
     parsedFrame = new Frame receivedFrame.bundle()
-    parsedFrame.op.should.be.equal Frame.DATA
+    parsedFrame.op.should.be.equal Frame.TEXT
     parsedFrame.length.should.be.equal 4
     #parsedFrame.message.should.be.equal 'test'
     done()

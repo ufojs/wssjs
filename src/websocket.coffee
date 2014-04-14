@@ -22,7 +22,8 @@ class WebSocket
         return self.onclose()
 
       e =
-        'data': receivedFrame.message
+        'data': receivedFrame.message,
+        'socketId': self.id
       self.onmessage e
 
     sockets.tcp.onReceive.addListener onReceive
@@ -33,7 +34,7 @@ class WebSocket
       console.log 'Summary: ' + JSON.stringify writeInfo
 
     frame = new Frame
-    frame.setOperation Frame.DATA
+    frame.setOperation Frame.TEXT
     frame.setMessage data
     sockets.tcp.send this.id, frame.bundle(), onMessageSent
 

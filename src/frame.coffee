@@ -2,7 +2,8 @@ bufferUtils = require './buffer-utils'
 
 class Frame
 
-  @DATA: 129
+  @TEXT: 129
+  @DATA: 130
   @CLOSE: 136
 
   constructor: (buffer) ->
@@ -10,16 +11,21 @@ class Frame
       this.op = -1
       this.message = ''
       return
-    view = new Uint8Array buffer
-    data = []
-    data.push element for element in view
-    this.op = data[0]
-    this.length = data[1] & 127
-    mask = data.slice 2, 6
-    decoded = data.slice 6, 6 + this.length
-    decoded = decoded.map (byte, index) ->
-      return byte ^ mask[index % 4]
-    this.message = bufferUtils.fromBufferToString decoded
+
+    frameView = new Uint8Array buffer
+    this.op = frameView[0]
+    this.length = frameView[1] & 127
+
+    maskIndex = switch
+      when this.length == 127 then 10
+      when this.length == 126 then 4
+      else 2
+    dataIndex = maskIndex + 4
+
+    plain = []
+    for index in [dataIndex..frameView.length-1]
+      plain[index-dataIndex] = frameView[index] ^ frameView[maskIndex + ((index - dataIndex) % 4)]
+    this.message = bufferUtils.fromBufferToString plain
 
   setOperation: (operation) ->
     this.op = operation
