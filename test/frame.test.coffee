@@ -19,14 +19,12 @@ describe 'A websocket frame', ->
     done()
 
   it 'should static definition for frame types', (done) ->
-    Frame.DATA.should.be.equal 1
-    Frame.CLOSE.should.be.equal 8
+    Frame.DATA.should.be.equal 129
+    Frame.CLOSE.should.be.equal 136
     done()
 
   it 'should calculate the op field', (done) ->
     thisFrame = new Frame
-    thisFrame.setOperation 2
-    thisFrame.op.should.be.equal 130
     thisFrame.setOperation Frame.DATA
     thisFrame.op.should.be.equal 129
     thisFrame.setOperation Frame.CLOSE
