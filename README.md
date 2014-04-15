@@ -1,20 +1,13 @@
 wssjs
 =====
 
-A websocket server for your browser
+A websocket server for your browser (uses ChromeApp API)
 
-[![Build Status](https://travis-ci.org/ufojs/wssjs.svg?branch=master)](https://travis-ci.org/ufojs/wssjs)
+[![Build Status](https://travis-ci.org/ufojs/wssjs.svg?branch=master)](https://travis-ci.org/ufojs/wssjs) [![Stories in Ready](https://badge.waffle.io/ufojs/wssjs.png?label=ready&title=Ready)](https://waffle.io/ufojs/wssjs)
 
-[![Stories in Ready](https://badge.waffle.io/ufojs/wssjs.png?label=ready&title=Ready)](https://waffle.io/ufojs/wssjs)
+Install the dependencies and compile the stack using ``npm install`` in the root folder of this project.
 
-Compile the stack using
-
-```
-make
-```
-in the root folder of this project.
-
-You'll find the compiled stack in ``./lib/`` folder; import it in your chrome app project using the ``<script>`` HTML tag and enjoy your in-browser websocket server. A sample application is located into ``./integration-test`` folder.
+You'll find the bundle in ``./lib/`` folder; import it in your chrome app project using the ``<script>`` HTML tag and enjoy your in-browser websocket server. A sample application is located into ``./integration-test`` folder.
 
 ### Ultra-rapid tutorial
 
