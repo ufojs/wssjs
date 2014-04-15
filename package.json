@@ -11,26 +11,29 @@
   ],
   "main": "./lib/wss.bundle.min.js",
   "scripts": {
-    "test": "make"
+    "test": "./node_modules/.bin/grunt unit-test compile integration-test",
+    "postinstall": "./node_modules/.bin/grunt"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ufojs/wssjs.git"
   },
   "license": "MIT",
-  "dependencies": {
-    "mocha": "^1.18.2",
-    "coffee-script": "^1.7.1",
-    "chai": "^1.9.1",
-    "coffeeify": "^0.6.0",
-    "browserify": "^3.39.0",
-    "uglify-js": "^2.4.13",
-    "rewire": "^2.0.0",
-    "karma": "^0.12.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "karma-mocha": "^0.1.3",
     "karma-chrome-launcher": "^0.1.3",
-    "karma-chai": "^0.1.0"
+    "karma-chai": "^0.1.0",
+    "coffee-script": "^1.7.1",
+    "chai": "^1.9.1",
+    "coffeeify": "^0.6.0",
+    "rewire": "^2.0.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-browserify": "^2.0.7",
+    "grunt-mocha-test": "^0.10.2",
+    "grunt-karma": "^0.8.2",
+    "grunt-shell": "^0.6.4",
+    "grunt-contrib-clean": "^0.5.0"
   }
 }
