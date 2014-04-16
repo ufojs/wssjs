@@ -3,7 +3,7 @@ wssjs <img src="http://benschwarz.github.io/bower-badges/badge@2x.png" width="13
 
 A websocket server for your browser (uses ChromeApp API)
 
-[![Build Status](https://travis-ci.org/ufojs/wssjs.svg?branch=master)](https://travis-ci.org/ufojs/wssjs) [![Stories in Ready](https://badge.waffle.io/ufojs/wssjs.png?label=ready&title=Ready)](https://waffle.io/ufojs/wssjs)
+[![GithubTag](http://img.shields.io/github/tag/ufojs/wssjs.svg)](https://github.com/ufojs/wssjs) [![Build Status](https://travis-ci.org/ufojs/wssjs.svg?branch=master)](https://travis-ci.org/ufojs/wssjs) [![Stories in Ready](https://badge.waffle.io/ufojs/wssjs.png?label=ready&title=Ready)](https://waffle.io/ufojs/wssjs) [![Gittip](http://img.shields.io/gittip/helloIAmPau.svg)](https://www.gittip.com/helloIAmPau/)
 
 Install the dependencies and compile the stack using ``npm install`` in the root folder of this project.
 
