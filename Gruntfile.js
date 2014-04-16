@@ -54,6 +54,12 @@ module.exports = function(grunt) {
         }
       }
     },
+    watch: {
+      test: {
+        files: ['test/*.coffee', 'src/*.coffee'],
+        tasks: 'mochaTest'
+      }
+    },
     clean: ['lib/', 'node_modules']
   });
 
@@ -63,11 +69,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('unit-test', ['mochaTest']);
   grunt.registerTask('compile', ['browserify', 'uglify']);
   grunt.registerTask('integration-test', ['shell:copyStack', 'karma']);
   grunt.registerTask('run-chrome', ['unit-test', 'compile', 'integration-test', 'shell:runchrome']);
+  grunt.registerTask('develop', ['watch:test']);
 
   grunt.registerTask('default', ['compile']);
 };
