@@ -2,3 +2,4 @@
 node_modules/
 lib/
 integration-test/chrome-app/wss.bundle.js
+npm-debug.log
