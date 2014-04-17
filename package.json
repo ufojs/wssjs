@@ -1,6 +1,6 @@
 {
   "name": "wss.js",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "author": "TinyBox",
   "description": "A websocket server for browers",
   "contributors": [
