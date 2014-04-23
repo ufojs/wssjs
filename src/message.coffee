@@ -15,12 +15,6 @@ class Message
 
   bundle: () ->
     fields = Object.keys this
-    functions = Object.keys this.__proto__
-
-    isNotAFunction = (element) ->
-      return functions.indexOf element == -1
-    
-    fields = fields.filter(isNotAFunction)
     
     pkt = 'HTTP/1.1 101 Switching Protocols\r\n'
     pkt += header + ': ' + this[header] + '\r\n' for header in fields

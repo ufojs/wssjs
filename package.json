@@ -14,7 +14,7 @@
     "test": "./node_modules/.bin/grunt unit-test compile integration-test",
     "clean": "./node_modules/.bin/grunt clean",
     "develop": "./node_modules/.bin/grunt develop",
-    "chrome": "./node_modules/.bin/grunt run-chrome",
+    "start": "./node_modules/.bin/grunt run-chrome",
     "postinstall": "./node_modules/.bin/grunt"
   },
   "repository": {
