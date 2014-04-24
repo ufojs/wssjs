@@ -3,7 +3,7 @@ wssjs <img src="http://benschwarz.github.io/bower-badges/badge@2x.png" width="13
 
 A websocket server for your browser (uses ChromeApp API)
 
-[![GithubTag](http://img.shields.io/github/tag/ufojs/wssjs.svg)](https://github.com/ufojs/wssjs/tree/v0.0.5)
+[![GithubTag](http://img.shields.io/github/tag/ufojs/wssjs.svg)](https://github.com/ufojs/wssjs/tags)
 [![Node Dependencies](https://david-dm.org/ufojs/wssjs/dev-status.svg)](https://david-dm.org/ufojs/wssjs#info=devDependencies)
 [![Build Status](https://travis-ci.org/ufojs/wssjs.svg?branch=master)](https://travis-ci.org/ufojs/wssjs)
 [![Stories in Ready](https://badge.waffle.io/ufojs/wssjs.png?label=ready&title=Ready)](https://waffle.io/ufojs/wssjs)
