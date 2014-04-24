@@ -19,6 +19,7 @@ class WebSocket
         self.close() if self.readyState == WebSocket.OPEN
         sockets.tcp.disconnect self.id
         self.readyState = WebSocket.CLOSED
+        sockets.tcp.onReceive.removeListener onReceive
         return self.onclose()
 
       e =

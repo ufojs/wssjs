@@ -10,7 +10,8 @@ var chrome = {
     },
     'tcp': {
       'onReceive': {
-        'addListener': function() {}
+        'addListener': function() {},
+        'removeListener': function() {}
       },
       'setPaused': function() {},
       'send': function() {}

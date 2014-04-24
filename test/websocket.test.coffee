@@ -97,6 +97,26 @@ describe 'A websocket', ->
     ws = new wsModule.WebSocket 'myId'
     ws.readyState = WebSocket.CLOSING
 
+  it 'should remove onReceive listener once websocket is closed', (done) ->
+    currentCallback = null
+    wsModule = rewire '../src/websocket'
+    chrome.sockets.tcp.onReceive.addListener = (callback) ->
+      currentCallback = callback
+      frame = new Frame
+      frame.setOperation Frame.CLOSE
+      setTimeout -> callback { 'socketId': 'myId', 'data': frame.bundle() }, 1000
+    chrome.sockets.tcp.disconnect = (id) ->
+    chrome.sockets.tcp.send = () ->
+    chrome.sockets.tcp.onReceive.removeListener = (callback) ->
+      callback.should.be.equal currentCallback
+      chrome.sockets.tcp.onReceive.removeListener = (callback) ->
+      done()
+    wsModule.__set__ 'sockets', chrome.sockets
+
+    ws = new wsModule.WebSocket 'myId'
+    ws.readyState = WebSocket.CLOSING
+
+
   it 'should respond to onclose callback', (done) ->
     ws = new WebSocket 'myId'
     ws.should.respondTo 'onclose'
