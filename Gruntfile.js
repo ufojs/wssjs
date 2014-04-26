@@ -25,13 +25,22 @@ module.exports = function(grunt) {
         }
       }
     },
-    mochaTest: {
+    mochacli: {
+      options: {
+        compilers: ['coffee:coffee-script/register'],
+        files: ['test/*.coffee']
+      },
       test: {
         options: {
-          require: 'coffee-script/register',
           reporter: 'spec'
-        },
-        src: ['test/*.coffee']
+        }
+      },
+      coverage: {
+        options: {
+          reporter: 'html-cov',
+          require: ['./test/register-handler.js'],
+          save: '/tmp/wssjs-coverage.html'
+        }
       }
     },
     karma: {
@@ -53,12 +62,21 @@ module.exports = function(grunt) {
             chrome = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome';
           return chrome + ' --load-and-launch-app=integration-test/chrome-app --user-data-dir=/tmp/testufo';
         }
+      },
+      coverageresult: {
+        command: function() {
+          var command = null;
+          var currentOS = os.type();
+          if(currentOS=='Darwin')
+            command = 'open'
+          return command + ' /tmp/wssjs-coverage.html'
+        }
       }
     },
     watch: {
       test: {
         files: ['test/*.coffee', 'src/*.coffee'],
-        tasks: 'mochaTest'
+        tasks: 'mochacli:test'
       }
     },
     clean: ['lib/', 'node_modules']
@@ -67,16 +85,17 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('unit-test', ['mochaTest']);
+  grunt.registerTask('unit-test', ['mochacli:test']);
   grunt.registerTask('compile', ['browserify', 'uglify']);
   grunt.registerTask('integration-test', ['shell:copyStack', 'karma']);
   grunt.registerTask('run-chrome', ['unit-test', 'compile', 'integration-test', 'shell:runchrome']);
   grunt.registerTask('develop', ['watch:test']);
+  grunt.registerTask('coverage', ['mochacli:coverage', 'shell:coverageresult']);
 
   grunt.registerTask('default', ['compile']);
 };
