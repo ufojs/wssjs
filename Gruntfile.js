@@ -3,6 +3,13 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    bower: {
+      install: {
+        options: {
+          copy: false
+        }
+      }
+    },
     uglify: {
       build: {
         src: 'lib/wss.bundle.js',
@@ -38,7 +45,7 @@ module.exports = function(grunt) {
       coverage: {
         options: {
           reporter: 'html-cov',
-          require: ['./test/register-handler.js'],
+          require: ['./lib/coffee-coverage-register-handlers/register-handlers.js'],
           save: '/tmp/wssjs-coverage.html'
         }
       }
@@ -89,12 +96,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-bower-task');
 
+  grunt.registerTask('installDeps', ['bower:install']);
   grunt.registerTask('unit-test', ['mochacli:test']);
-  grunt.registerTask('compile', ['browserify', 'uglify']);
+  grunt.registerTask('compile', ['installDeps', 'browserify', 'uglify']);
   grunt.registerTask('integration-test', ['shell:copyStack', 'karma']);
   grunt.registerTask('run-chrome', ['unit-test', 'compile', 'integration-test', 'shell:runchrome']);
-  grunt.registerTask('develop', ['watch:test']);
+  grunt.registerTask('develop', ['installDeps', 'watch:test']);
   grunt.registerTask('coverage', ['mochacli:coverage', 'shell:coverageresult']);
 
   grunt.registerTask('default', ['compile']);
